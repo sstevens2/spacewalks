@@ -1,3 +1,4 @@
 data/
 .DS_Store
 *.dat
+venv_spacewalks/
