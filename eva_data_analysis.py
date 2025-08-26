@@ -2,6 +2,16 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def read_json_to_dataframe(input_file):
+    """
+    Read the data from a JSON file into a Pandas Dataframe
+    Clean the data by removing any incomplete rows and sorting by date
+
+    Args:
+        input_file (str): The path to the JSON file
+
+    Returns:
+        eva_data (pd.DataFrame): The cleaned and sorted data as a dataframe structure
+    """
     # Read in the data from a JSON file into pandas df
     eva_df = pd.read_json(input_file, convert_dates=['date'])
     eva_df['eva'] = eva_df['eva'].astype(float)
@@ -11,7 +21,16 @@ def read_json_to_dataframe(input_file):
     return eva_df
 
 def write_dataframe_to_csv(df, output_file):
-    # Save data frame to CSV file for later analysis
+    """
+    Write the dataframe to a CSV file
+
+    Args:
+        df (pd.DataFrame): The input dataframe
+        output_file (str): The path to the output CSV file
+    
+    Returns:
+        None
+    """
     df.to_csv(output_file, index=False)
 
 # Data source: https://data.nasa.gov/resource/eva.json (with modifications)
