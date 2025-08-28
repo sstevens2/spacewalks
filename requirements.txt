@@ -1,3 +1,5 @@
 datetime
 matplotlib
 pandas
+pytest
+pytest-cov
