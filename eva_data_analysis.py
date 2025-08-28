@@ -9,6 +9,9 @@ def main(input_file, output_file, graph_file):
     eva_data = read_json_to_dataframe(input_file)
 
     eva_data = add_crew_size_column(eva_data)
+    
+    dur_by_astro_csv = 'results/duration_by_astronaut.csv'
+    dur_by_astro = sum_duration_by_astronaut(eva_data, dur_by_astro_csv)
 
     write_dataframe_to_csv(eva_data, output_file)
 
@@ -139,6 +142,25 @@ def plot_cumulative_time_in_space(df, graph_file):
     plt.savefig(graph_file)
     plt.show()
 
+def sum_duration_by_astronaut(df, output_csv):
+    """
+    Summarizes the duration data by each astronaut and saves resulting table to a CSV file
+
+    Args: 
+        df (pd.DataFrame): The input dataframe to be summarized
+        output_csv (str): Path to save the output csv of the table generated
+
+    
+    Returns:
+        sum_by_astro (pd.DataFrame): Data frame with a row for each astronaut and a summarized column 
+    """
+    subset = df.loc[:,['crew', 'duration']] # subset to work with only relevant columns
+    subset = add_duration_hours_variable(subset) # need duration_hours for easier calcs
+    subset = subset.drop('duration', axis=1) # dropping extra duration file as those don't calculate correctly
+    subset = subset.groupby('crew').sum() 
+    print(f'Saving to CSV file {output_csv}')
+    subset.to_csv(output_csv) # writing new table to specified location
+    return subset
 
 if __name__ == "__main__":
 
