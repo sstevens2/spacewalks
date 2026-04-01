@@ -8,14 +8,6 @@ output_file <- "./eva-data.csv"
 graph_file  <- "./cumulative_eva_graph.png"
 
 # 1) Read JSON array into a tibble
-#' Title
-#'
-#' @param input_file a path to the locak file
-#'
-#' @returns
-#' @export
-#'
-#' @examples
 read_json_to_dataframe <- function(input_file) {
   jsonlite::fromJSON(input_file) |>
     tibble::as_tibble()
