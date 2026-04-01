@@ -1,17 +1,17 @@
-library(tidyverse) #tidyverse "contains" ggplot2
+library(tidyverse)
 library(jsonlite)
 library(lubridate)
 
-
+# Files
 input_file  <- "./eva-data.json"
 output_file <- "./eva-data.csv"
 graph_file  <- "./cumulative_eva_graph.png"
 
-
+# 1) Read JSON array into a tibble
 eva_tbl <- jsonlite::fromJSON(input_file) |>
   as_tibble()
 
-subset=c('duration','date')
+# 2) Convert types + drop missing duration/date
 eva_tbl <- eva_tbl |>
   mutate(
     eva  = as.numeric(eva),
@@ -19,14 +19,14 @@ eva_tbl <- eva_tbl |>
   ) |>
   filter(!is.na(duration), duration != "", !is.na(date))
 
-
+# 3) Write CSV (index=False equivalent)
 readr::write_csv(eva_tbl, output_file)
 
-
+# 4) Sort by date
 eva_tbl <- eva_tbl |>
   arrange(date)
 
-
+# 5) duration_hours + cumulative_time
 eva_tbl <- eva_tbl |>
   mutate(
     duration_hours = {
@@ -36,7 +36,7 @@ eva_tbl <- eva_tbl |>
     cumulative_time = cumsum(duration_hours)
   )
 
-
+# 6) Plot + save
 p <- ggplot(eva_tbl, aes(x = date, y = cumulative_time)) +
   geom_point() +
   geom_line() +
